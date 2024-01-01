@@ -1,9 +1,13 @@
 import { SerialPort } from 'serialport'
 import { initializeApp } from "firebase/app";
-import { ReadlineParser } from '@serialport/parser-readline'
-import { pokerCards, resetCards, bookmarkChips } from './usePokerCards.js'
-import { getDatabase, onValue, ref, set, get, push } from "firebase/database";
 import { TexasHoldem } from "poker-odds-calc";
+import { ReadlineParser } from '@serialport/parser-readline'
+import { getDatabase, onValue, ref, set, get, push } from "firebase/database";
+
+import { getToday } from './useTime.js'
+import { pokerCards, resetCards, bookmarkChips } from './usePokerCards.js'
+import { isValidCardInput, isValidDealerInput } from './useCardValidator.js'
+
 
 const firebaseConfig = {
     databaseURL: "https://texas-arduino-default-rtdb.europe-west1.firebasedatabase.app/",
@@ -11,41 +15,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-function isValidCardInput(card, cards) {
-    if (!card?.cardName) {
-        return false;
-    }
 
-    if (cards.includes(card?.cardName)) {
-        return false;
-    }
 
-    if (cards.length > 1) {
-        return false;
-    }
-
-    return true;
-}
-
-function isValidDealerInput(card, cards) {
-    if (player2.cards.includes(card?.cardName)) {
-        return false;
-    }
-
-    if (!card?.cardName) {
-        return false;
-    }
-
-    if (cards.includes(card?.cardName)) {
-        return false;
-    }
-
-    if (cards.length > 4) {
-        return false;
-    }
-
-    return true;
-}
 
 function convertLineToCard(line) {
     return pokerCards.find((card) => String(line).includes(card.id))
@@ -131,22 +102,7 @@ function scanPlayerLine(player, line) {
     }
 }
 
-function getToday() {
-    const today = new Date();
-
-    const day = today.getDate().toString().padStart(2, '0');
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const year = today.getFullYear();
-
-    const hours = today.getHours().toString().padStart(2, '0');
-    const minutes = today.getMinutes().toString().padStart(2, '0');
-    const seconds = today.getSeconds().toString().padStart(2, '0');
-
-    return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
-}
-
 async function recordGame() {
-    const today = getToday();
     const recordingsRef = ref(database, '/recordings');
 
     await push(recordingsRef, {
@@ -263,22 +219,6 @@ player2.port.pipe(player2.parser).on('data', line => {
     dealerAction(line)
 })
 
-
-// var player3 = {
-//     name: 'doichi',
-//     parser: new ReadlineParser(),
-//     firebaseCards: '/players/3/cards',
-//     cards: [],
-//     port: new SerialPort({
-//         path: 'COM4',
-//         baudRate: 115200,
-//     })
-// }
-
-// player3.port.pipe(player3.parser).on('data', line => {
-//     console.log(line)
-//     scanPlayerLine(player3, line)
-// })
 
 
 var dealer = {
