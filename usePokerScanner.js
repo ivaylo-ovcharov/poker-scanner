@@ -99,7 +99,7 @@ function calculateChances() {
 
     set(ref(database, 'players/1/chance'), `${((player1Wins / totalWins) * 100).toFixed(0)}%`);
     set(ref(database, 'players/0/chance'), `${((player2Wins / totalWins) * 100).toFixed(0)}%`);
-    set(ref(database, 'players/3/chance'), `${((player3Wins / totalWins) * 100).toFixed(0)}%`);
+    // set(ref(database, 'players/3/chance'), `${((player3Wins / totalWins) * 100).toFixed(0)}%`);
     return {
         player1: `${((player1Wins / totalWins) * 100).toFixed(0)}%`,
         player2: `${((player2Wins / totalWins) * 100).toFixed(0)}%`
@@ -250,7 +250,7 @@ var player2 = {
     cards: [],
     firebaseCards: '/players/0/cards',
     port: new SerialPort({
-        path: 'COM12',
+        path: 'COM4',
         baudRate: 115200,
     })
 }
@@ -264,21 +264,21 @@ player2.port.pipe(player2.parser).on('data', line => {
 })
 
 
-var player3 = {
-    name: 'doichi',
-    parser: new ReadlineParser(),
-    firebaseCards: '/players/3/cards',
-    cards: [],
-    port: new SerialPort({
-        path: 'COM4',
-        baudRate: 115200,
-    })
-}
+// var player3 = {
+//     name: 'doichi',
+//     parser: new ReadlineParser(),
+//     firebaseCards: '/players/3/cards',
+//     cards: [],
+//     port: new SerialPort({
+//         path: 'COM4',
+//         baudRate: 115200,
+//     })
+// }
 
-player3.port.pipe(player3.parser).on('data', line => {
-    console.log(line)
-    scanPlayerLine(player3, line)
-})
+// player3.port.pipe(player3.parser).on('data', line => {
+//     console.log(line)
+//     scanPlayerLine(player3, line)
+// })
 
 
 var dealer = {
