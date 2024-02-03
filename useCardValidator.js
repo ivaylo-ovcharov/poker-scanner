@@ -1,33 +1,28 @@
-export function isValidCardInput(card, cards) {
+export function isValidCardInput(card, playerCards, cardsInPlay) {
     if (!card?.cardName) {
         return false;
     }
 
-    if (cards.includes(card?.cardName)) {
+    if (cardsInPlay.includes(card.cardName)) {
         return false;
     }
 
-    if (cards.length > 1) {
+    if (playerCards.length > 1) {
         return false;
     }
 
     return true;
 }
 
-export function isValidDealerInput(card, cards) {
-    if (player2.cards.includes(card?.cardName)) {
-        return false;
-    }
-
+export function isValidDealerInput(card, dealerCards, cardsInPlay) {
     if (!card?.cardName) {
         return false;
     }
-
-    if (cards.includes(card?.cardName)) {
+    if (cardsInPlay.includes(card.cardName)) {
         return false;
     }
 
-    if (cards.length > 4) {
+    if (dealerCards.length > 4) {
         return false;
     }
 
