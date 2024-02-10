@@ -15,10 +15,11 @@ export function isValidCardInput(card, playerCards, cardsInPlay) {
 }
 
 export function isValidDealerInput(card, dealerCards, cardsInPlay) {
+    console.log({ first: !card?.cardName, second: cardsInPlay.includes(card?.cardName), third: dealerCards.length > 4 })
     if (!card?.cardName) {
         return false;
     }
-    if (cardsInPlay.includes(card.cardName)) {
+    if (cardsInPlay.includes(card?.cardName)) {
         return false;
     }
 

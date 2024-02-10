@@ -9,6 +9,7 @@
     "express": "^4.18.2",
     "firebase": "^10.7.0",
     "poker-odds-calc": "^0.0.14",
+    "pokersolver": "^2.1.4",
     "serialport": "^12.0.0"
   }
 }
