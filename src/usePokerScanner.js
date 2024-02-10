@@ -94,7 +94,6 @@ function calculateChances(player1Cards, player2Cards, board) {
         set(ref(database, `players/${player.firebaseId}/hand`), identifyHand(player.cards, dealer.cards));
     })
 
-
     return {
         player1: (playersResults[0].data.wins / totalWins * 100).toFixed(0),
         player2: (playersResults[1].data.wins / totalWins * 100).toFixed(0)
@@ -167,9 +166,8 @@ function updateDealerCards(card) {
     const playersCards = players.flatMap((player) => player.cards);
     const dealerCards = dealer.cards;
     const cardsInPlay = [...playersCards, ...dealerCards].flat();
-    console.log({ dealerCards })
+
     const dealerInputIsValid = isValidDealerInput(card, dealer.cards, cardsInPlay);
-    // console.log({ dealerInputIsValid, playersCards, dealerCards, cardsInPlay })
 
     if (dealerInputIsValid) {
         dealer.cards.push(card.cardName);
@@ -187,7 +185,6 @@ function dealerAction(line) {
         return;
     }
     const card = convertLineToCard(line)
-    console.log({ card })
     updateDealerCards(card)
 
     const validForChanceCalculation = isValidForChanceCalculation(players[0]?.cards, players[1]?.cards, dealer.cards)
@@ -226,20 +223,16 @@ function scanPlayerLine(player, line) {
     }
 
     const validForChanceCalculation = isValidForChanceCalculation(players[0]?.cards, players[1]?.cards, dealer.cards)
-    console.log({ validForChanceCalculation })
+
     if (validForChanceCalculation) {
         canRecord = true
         calculateChances()
     }
 }
 
-
-
-
 const players = [
     {
         name: 'dancho',
-        // isDealer: true,
         parser: new ReadlineParser(),
         cards: [],
         firebaseId: 2,
@@ -251,7 +244,6 @@ const players = [
     {
         name: 'ivo',
         parser: new ReadlineParser(),
-        isDealer: true,
         firebaseId: 3,
         cards: [],
         port: new SerialPort({
@@ -265,10 +257,6 @@ players.forEach(player => {
     player.port.pipe(player.parser).on('data', line => {
         console.log(line);
         scanPlayerLine(player, line);
-
-        if (player.isDealer && player.cards.length === 2) {
-            dealerAction(line);
-        }
     });
 });
 
