@@ -4,6 +4,7 @@
     "@serialport/bindings-cpp": "^12.0.1",
     "@serialport/parser-readline": "^12.0.0",
     "@serialport/parser-ready": "^12.0.0",
+    "@supabase/supabase-js": "^2.39.6",
     "axios": "^1.6.3",
     "cheerio": "^1.0.0-rc.12",
     "express": "^4.18.2",

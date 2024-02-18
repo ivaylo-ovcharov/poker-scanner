@@ -1,13 +1,12 @@
 import { SerialPort } from 'serialport'
 import { initializeApp } from "firebase/app";
 import { TexasHoldem } from "poker-odds-calc";
-import PokerSolver from 'pokersolver';
 import { ReadlineParser } from '@serialport/parser-readline'
 import { getDatabase, ref, set, onValue, push } from "firebase/database";
-
-import { getToday } from './useTime.js'
 import { pokerCards, resetCards, bookmarkChips } from './usePokerCards.js'
 import { isValidCardInput, isValidDealerInput } from './useCardValidator.js'
+import { identifyHand } from './useHandSolver.js'
+import { getToday } from './useTime.js'
 
 
 const firebaseConfig = {
@@ -17,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 
-var gameId = '-NqHfuyN_464lIPwayde';
+var gameId = '-NqNpMJ5NKTkT_epb4UI';
 var firebaseGame = {}
 var bookmarked = false;
 var firstCardRegisteredAt = '';
@@ -59,18 +58,6 @@ function getTotalWins(resultPlayers) {
         totalWins = totalWins + resultPlayer.data.wins
     })
     return totalWins
-}
-
-function identifyHand(playerCards, boardCards) {
-    const convertedPlayerCards = playerCards
-    const convertedBoardCards = boardCards
-    var hand = PokerSolver.Hand.solve([...convertedPlayerCards, ...convertedBoardCards]);
-
-    return {
-        name: hand.name,
-        description: hand.descr,
-        bestCards: hand.cards.map((card) => `${card.value}${card.suit}`)
-    }
 }
 
 function calculateChances(player1Cards, player2Cards, board) {
@@ -196,6 +183,7 @@ function dealerAction(line) {
 }
 
 function validatePlayerCard(card, player) {
+    // This should go inside the lib
     const playersCards = players.flatMap((player) => player.cards);
     const dealerCards = dealer.cards;
     const cardsInPlay = [...playersCards, ...dealerCards].flat();

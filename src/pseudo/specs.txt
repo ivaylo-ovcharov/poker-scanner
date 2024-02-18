@@ -1,0 +1,19 @@
+Chart ideas:
+
+// Installation
+- Total Players
+- Total Games Played
+- Total Hands Dealth
+
+// Players
+- Players - total chip stack
+- Total Games Played
+- Total Hands Played
+- Total chips won trough games, total chips lost trough games
+- Total bluffs, total chips lost with bluffs, total chips won by blufs
+
+// Compare Players
+
+- Players total bluffs
+- Players total won bluffs
+- Players chips won with bluffs
