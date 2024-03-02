@@ -1,4 +1,4 @@
-import { SerialPort } from 'serialport'
+import { SerialPortMock, SerialPort  } from 'serialport'
 import { ReadlineParser } from '@serialport/parser-readline'
 
 export function generateReader({ path, playerId }, isDealer = false) {

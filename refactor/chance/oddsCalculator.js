@@ -22,12 +22,7 @@ export function calculateChances(dealerCards, players) {
         playersChances[playersKeys[index]] = (playerResult.data.wins / totalWins * 100).toFixed(0)
     });
 
-    console.log({ playersChances })
-
-    // players.forEach((player, index) => {
-    //     set(ref(database, `players/${player.firebaseId}/chance`), `${((playersResults[index].data.wins / totalWins) * 100).toFixed(0)}%`);
-    //     set(ref(database, `players/${player.firebaseId}/hand`), identifyHand(player.cards, dealer.cards));
-    // })
+    return playersChances
 }
 
 function getTotalWins(resultPlayers) {

@@ -1,15 +1,15 @@
 import { calculateChances } from './oddsCalculator.js';
 
 
-export function calculateAndImportChancesIfValid(dealerCards, players, readers) {
+export function calculateAndImportChancesIfValid(dealerCards, players, activePlayersCount) {
     const dealerIsValid = dealerCardsAreValidToCalculate(dealerCards)
-    const playersAreValid = allPlayersHaveScannedCards(players, readers)
-
-    console.log({ dealerCards, players })
+    const playersAreValid = allPlayersHaveScannedCards(players, activePlayersCount)
 
     if (dealerIsValid && playersAreValid) {
-        calculateChances(dealerCards, players)
+        return calculateChances(dealerCards, players)
     }
+
+    return null
 }
 
 
@@ -21,10 +21,10 @@ function dealerCardsAreValidToCalculate(dealerCards) {
     return false
 }
 
-function allPlayersHaveScannedCards(players, readers) {
+function allPlayersHaveScannedCards(players, activePlayersCount) {
     const allPlayerCards = Object.values(players).flat()
 
-    if (allPlayerCards.length === (readers.length - 1) * 2) {
+    if (allPlayerCards.length === activePlayersCount * 2) {
         return true
     }
 

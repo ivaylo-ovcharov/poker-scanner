@@ -1,25 +1,38 @@
 
-import { pokerCards } from './const/pokerCards.js'
+import { pokerCards, resetCards } from './const/pokerCards.js'
+import useScanActions from './supabase/useScanActions.js'
 import { calculateAndImportChancesIfValid } from './chance/chance.js'
 
 let players = {};
 let dealerCards = [];
+const { importPlayerScanCardToDb, importDealerScanCardToDb, resetScanToDb, importPlayersCalculations, foldPlayersHandToDb } = useScanActions();
 
 function getAllCardsInPlay() {
     return [...dealerCards, ...Object.values(players).flat()]
 }
 
-function importCardForPlayer(player, card) {
-    if (!players[player.path]) {
-        players[player.path] = []
+function importCardForPlayer(playerId, card) {
+    if (!players[playerId]) {
+        players[playerId] = []
     }
 
-    if (players[player.path].length < 2)
-        players[player.path].push(card)
+    if (players[playerId].length < 2) {
+        players[playerId].push(card)
+        importPlayerScanCardToDb(playerId, players[playerId])
+    }
 }
 
 function importCardForDealer(card) {
     dealerCards.push(card)
+    importDealerScanCardToDb(dealerCards)
+}
+
+function findAndFoldPlayersHand(cardToIdentify) {
+    Object.keys(players).forEach(playerId => {
+        if (players[playerId].find(card => card === cardToIdentify)) {
+            foldPlayersHandToDb(playerId)
+        }
+    });
 }
 
 function convertLineToCardIfValid(line) {
@@ -36,18 +49,39 @@ function convertLineToCard(line) {
     return pokerCards.find((card) => String(line).includes(card.id))?.cardName || ''
 }
 
+function checkForResetCard(uid) {
+    if (resetCards.includes(uid)) {
+        resetScanToDb()
+        players = {};
+        dealerCards = [];
+        console.log('reset')
+        return  
+    }
+}
 
-export function executeCardReader(scanner, line, readers) {
+
+export function executeCardReader(line, playerId, isDealer,isDealerTrash, activePlayersCount) {
+    checkForResetCard(line)
+    const unvalidatedCard = convertLineToCard(line)
     const card = convertLineToCardIfValid(line);
-    if (!card) return
 
-    if (scanner.isDealer) {
-        importCardForDealer(card)
-    } else {
-        importCardForPlayer(scanner, card)
+    if(isDealerTrash) {
+        findAndFoldPlayersHand(unvalidatedCard)
     }
 
-    const playersChances = calculateAndImportChancesIfValid(dealerCards, players, readers)
+    if (!card) return
+
+    if (isDealer) {
+        importCardForDealer(card)
+    } else {
+        importCardForPlayer(playerId, card)
+    }
+
+    const playersChances = calculateAndImportChancesIfValid(dealerCards, players, activePlayersCount)
+    
+    if (playersChances) {
+        importPlayersCalculations(playersChances)
+    }
 }
 
 
