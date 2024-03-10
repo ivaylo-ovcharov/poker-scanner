@@ -9,7 +9,7 @@ export const pokerCards = [
     { name: '8 of clubs', id: '0480C16A581390', cardName: '8c' },
     { name: '9 of clubs', id: '0488D06A581390', cardName: '9c' },
     { name: '10 of clubs', id: '0487216A581390', cardName: 'Tc' },
-    { name: 'Jack of clubs', id: '1DBA3AE1930000', cardName: 'Jc' },
+    { name: 'Jack of clubs', id: '04A4BA6A581390', cardName: 'Jc' },
     { name: 'Queen of clubs', id: '04CD506A581390', cardName: 'Qc' },
     { name: 'King of clubs', id: '04AE266A581394', cardName: 'Kc' },
     { name: 'Ace of clubs', id: '04CA996A581390', cardName: 'Ac' },
@@ -122,4 +122,4 @@ export const pokerCards = [
 ];
 
 
-export const resetCards = ['92891B51', '70D44655']
+export const resetCards = ['92891B51', '70D44655', '929FA451', '04A5836A581390']

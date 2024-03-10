@@ -2,6 +2,9 @@ import { calculateChances } from './oddsCalculator.js';
 
 
 export function calculateAndImportChancesIfValid(dealerCards, players, activePlayersCount) {
+    if (activePlayersCount < 2) {
+        return
+    }
     const dealerIsValid = dealerCardsAreValidToCalculate(dealerCards)
     const playersAreValid = allPlayersHaveScannedCards(players, activePlayersCount)
 

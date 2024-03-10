@@ -14,8 +14,7 @@ const server = http.createServer((req, res) => {
     const isDealer = [7, 6, 5, 1].includes(result?.antenna)
     const isDealerTrash = result?.antenna === 1;
     const playerId = mapAntenaIdToPlayer(result?.antenna)
-    const activePlayersCount = 2;
-    executeCardReader(result?.uid, playerId, isDealer, isDealerTrash, activePlayersCount)
+    executeCardReader(result?.uid, playerId, isDealer, isDealerTrash)
   });
 });
 
